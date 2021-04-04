@@ -1,0 +1,52 @@
+
+.tableTheme {
+  margin:auto;
+  width:700px;
+  padding:32px;
+}
+.pageHeaders{
+  font-family: monospace;
+  text-align: center;
+  background-color:#F5F5F5;
+}
+.tableHeader {
+  background-color: #F5F5F5;
+  padding:8px;
+  font-family: monospace;
+  font-size:15px;
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(-2000px)
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+.tableRow{
+  animation: slideIn;
+}
+.tableRow :hover{
+  cursor:default;
+  background-color: #efefef;
+}
+.tableCell {
+  font-family: monospace;
+  padding:8px;
+  font-size: 13px;
+  text-align: center;
+  overflow: auto;  
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner{
+    border: 2px solid #343a40;
+    border-top: 2px solid white; 
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    animation: spin 0.4s linear infinite;
+}
