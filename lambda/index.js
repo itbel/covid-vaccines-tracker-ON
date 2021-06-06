@@ -8,17 +8,19 @@ const hoursInMilliseconds = process.env.updateFrequency
 
 const transformData = (data) => {
   let records = data.records.map((entry) => {
-    let a = entry[5];
+    let a = entry[8];
+    let b = entry[6];
     return [
       ...entry
-        .splice(1, 3)
+        .splice(1, 2)
         .map((ent, index) => (index === 0 ? ent.slice(0, 10) : ent)),
-      a,
+      b,
+      a
     ];
   });
   return {
     records: records.splice(records.length - 7).reverse(),
-    fields: ["Date", "Daily Total", "Total Doses", "Fully Vaccinated"],
+    fields: ["Date", "Doses Administered", "Total First Doses", "Total Fully Vaccinated"],
   };
 };
 
@@ -47,6 +49,7 @@ const fetchFromExtAPI = async () => {
       `https://data.ontario.ca/datastore/dump/8a89caa9-511c-4568-af89-7f2174b4378c?format=json`
     );
     const json_data = await response.json();
+    console.log(json_data)
     await saveToS3(json_data);
     return transformData(json_data);
   } catch (err) {
