@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Spinner from "./Spinner";
 
 function App() {
   const [headerData, setHeaderData] = useState([]);
   const [fieldData, setFieldData] = useState([]);
-  const API_KEY = "";
-  const URI = "";
+  const API_KEY = "zrZ6NnYASR9ta03GcHUs1apcTYbk7fbZ763e6DIp";
+  const URI = "https://33qka4mlhl.execute-api.us-east-1.amazonaws.com/prod/covid";
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -21,8 +22,8 @@ function App() {
           }
         );
         const data = await response.json();
-        setFieldData(data.body.records);
-        setHeaderData(data.body.fields);
+        setFieldData(data.body);
+        setHeaderData(Object.keys(data.body[0]));
       } catch (err) {
         console.error(err);
       }
@@ -45,7 +46,7 @@ function App() {
     );
   };
   const Cells = ({ field }) => {
-    return field.map((cell, index) => {
+    return Object.values(field)?.map((cell, index) => {
       return (
         <td className="tableCell" key={index}>
           {cell}
@@ -55,15 +56,14 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <div style={{ overflowY: "auto", overflowX: "hidden" }}>
+    <div style={{ backgroundColor: "white" }}>
+      <h1 className="pageHeader" colSpan={4}>
+        Ontario - Vaccinations
+      </h1>
+      <div>
+
         <table cellSpacing={0} className="tableTheme">
           <thead>
-            <tr>
-              <th className="tableHeader" colSpan={4}>
-                Ontario - Last 7 Days
-              </th>
-            </tr>
             <tr>
               {headerData &&
                 headerData.map((header) => {
@@ -76,30 +76,18 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {fieldData.length ? (
+            {fieldData?.length ?
               fieldData.map((field, index) => {
                 return <Row key={index} field={field} index={index} />;
-              })
-            ) : (
-              <tr style={{ backgroundColor: "#F5F5F5" }} className="tableRow">
-                <td
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginBottom: 8,
-                    marginTop: 8,
-                  }}
-                  colSpan={4}
-                >
-                  <div className="spinner" />
-                </td>
-              </tr>
-            )}
+              }) : null}
           </tbody>
+          <tfoot>
+            {fieldData?.length ? <tr><td style={{ fontSize: 10, textAlign: 'center', color: '#808080', paddingTop: 30 }} colSpan={3}>Contains information licensed under the <a href="https://www.ontario.ca/page/open-government-licence-ontario">Open Government Licence – Ontario.</a></td></tr> : null}
+          </tfoot>
         </table>
+        {fieldData.length ? null : <div className="spinner_container"><Spinner /></div>}
       </div>
     </div>
-  );
+  )
 }
-
 export default App;
